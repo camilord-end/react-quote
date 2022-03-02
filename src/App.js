@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import COLORS_ARRAY from './colorsArray'
 
 let quoteDBUrl =
   "https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json";
 
 function App() {
   const [quote, setQuote] = useState(
-    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+    "In order to succeed, your desire for success should be greater than your fear of failure."
   );
-  const [author, setAuthor] = useState("Lorem ipsum");
-  const [quotesArray, setQuotesArray] = useState(null);
+  const [author, setAuthor] = useState("Bill Cosby")
+  const [quotesArray, setQuotesArray] = useState(null)
+  const [accentColor, setAccentColor] = useState('#14532D')
 
   const fetchQuotes = async (url) => {
     const response = await fetch(url);
@@ -23,27 +25,32 @@ function App() {
 
   const generateRandomQuote = () => {
     let randomInteger = Math.floor(quotesArray.length * Math.random());
+    let randomAccent = Math.floor(COLORS_ARRAY.length * Math.random());
+    setAccentColor(COLORS_ARRAY[randomAccent]);
     setQuote(quotesArray[randomInteger].quote);
     setAuthor(quotesArray[randomInteger].author);
   };
 
   return (
     <div className="App">
-      <header className="App-header">
-        <div id="quote-box" className="bg-purple-300 rounded px-5 py-5">
+      <header className="App-header bg-purple-900" style={{backgroundColor: accentColor, color: accentColor}}>
+        <div id="quote-box" className={`m-5 max-w-md bg-white rounded px-5 py-5 shadow-2xl shadow-stone-900 text-purple-900 `} style={{color: accentColor}}>
           <p id="text">"{quote}"</p>
-          <p id="author">-{author}</p>
+          <p id="author" className="text-right font-bold pb-4 pr-6" >-{author}</p>
           <a
             id="tweet-quote"
-            href={`http://www.twitter.com/intent/tweet?text="${quote}" -${author}`}
+            href={`http://www.twitter.com/intent/tweet?text="${quote}" ${author}`}
             target="_blank"
             rel="noreferrer"
+            className="float-left pl-5"
           >
-            Tweet quote
+            T
+            {/* <i className="fa-brands fa-twitter"></i> */}
           </a>
           <button
+            style={{backgroundColor: accentColor}}
             id="new-quote"
-            className="bg-purple-900 text-white rounded"
+            className="mx-2 float-right rounded-md px-3 py-1 font-semibold cursor-pointe border-2  bg-purple-900 text-white hover:bg-white hover:border-cyan-400 transition duration-200 ease-in-out hover:shadow-lg hover:shadow-cyan-500/50"
             onClick={() => {
               generateRandomQuote();
             }}
